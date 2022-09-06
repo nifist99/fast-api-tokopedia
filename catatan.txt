@@ -1,0 +1,11 @@
+You can install all of these with pip install "fastapi[all]".
+pip install fastapi
+
+check document api otomatis 
+http://127.0.0.1:8000/docs
+
+run fast api uvicorn main:app --reload
+
+pip install sqlalchemy
+
+For this to work, you need to pip install python-dotenv.
