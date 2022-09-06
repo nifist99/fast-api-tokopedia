@@ -1,24 +1,24 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 
-ApiTokopedia = APIRouter(prefix="/tokopedia")
+ApiUsersTokopedia = APIRouter(prefix="/tokopedia")
 
-@ApiTokopedia.get("/all")
+@ApiUsersTokopedia.get("/all")
 async def all():
     return "message"
 
-@ApiTokopedia.get("/detail/{id}")
+@ApiUsersTokopedia.get("/detail/{id}")
 async def detail(id : int):
     return "message"
 
-@ApiTokopedia.put("/update")
+@ApiUsersTokopedia.put("/update")
 async def update():
     return "message"
 
-@ApiTokopedia.post("/save")
+@ApiUsersTokopedia.post("/save")
 async def save():
     return "message"
 
-@ApiTokopedia.get("/delete/{id}")
+@ApiUsersTokopedia.get("/delete/{id}")
 async def delete(id : int):
     return "message"
