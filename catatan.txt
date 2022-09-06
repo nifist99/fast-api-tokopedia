@@ -9,3 +9,7 @@ run fast api uvicorn main:app --reload
 pip install sqlalchemy
 
 For this to work, you need to pip install python-dotenv.
+
+jwt token pip install "python-jose[cryptography]"
+
+password hasing pip install "passlib[bcrypt]"
