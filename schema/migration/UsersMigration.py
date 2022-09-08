@@ -1,9 +1,10 @@
 from sqlalchemy.schema import Column
 from sqlalchemy.types import String, Integer, Text,DateTime,Date
-from database.ConnectionDB import Base
+from . import Base
 
 class Users(Base):
-    __tablename__       = "users"
+    __tablename__       = "users",
+    Base.metadata,
     id                  = Column(Integer, primary_key=True, index=True)
     privileges_id       = Column(Integer)
     name                = Column(String(250))

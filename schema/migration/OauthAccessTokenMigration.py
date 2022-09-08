@@ -1,10 +1,11 @@
 from sqlalchemy.schema import Column
 from sqlalchemy.types import String, Integer, Text,DateTime,Date
-from database.ConnectionDB import Base
+from . import Base
 
 class Oauth(Base):
     __tablename__       = "oauth_access_token"
     id                  = Column(Integer, primary_key=True, index=True)
+    users_id             = Column(Integer)
     name                = Column(String(250))
     token               = Column(String(1000))
     screet_key          = Column(String(250))

@@ -3,8 +3,9 @@ from sqlalchemy.pool import NullPool
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "mysql+mysqlconnector://root@localhost:3306/tokopedia"
-engine = create_engine(DATABASE_URL)
+# DATABASE_URL = "mysql+pymysql://root@localhost:3306/fastapi"
+DATABASE_URL = 'postgresql://postgres:admin123@localhost/test'
+engine = create_engine(DATABASE_URL, poolclass=NullPool)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
