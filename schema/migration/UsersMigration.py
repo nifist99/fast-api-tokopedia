@@ -3,8 +3,7 @@ from sqlalchemy.types import String, Integer, Text,DateTime,Date
 from . import Base
 
 class Users(Base):
-    __tablename__       = "users",
-    Base.metadata,
+    __tablename__       = "users"
     id                  = Column(Integer, primary_key=True, index=True)
     privileges_id       = Column(Integer)
     name                = Column(String(250))

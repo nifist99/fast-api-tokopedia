@@ -26,3 +26,8 @@ python -m venv env
 python -m pip install --upgrade pip
 
 env\Scripts\activate
+
+jwt token
+
+pip install "python-jose[cryptography]"
+pip install "passlib[bcrypt]"
