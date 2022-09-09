@@ -11,7 +11,7 @@ from migrations.PrivilegesMigration import Privileges
 from migrations.OauthAccessTokenMigration import Oauth
 from ConnectionDB import Base,engine
 
-from app.helper.date import ConfigDate
+from datetime import datetime
 
 # create table atau migration
 
@@ -19,11 +19,5 @@ Oauth.metadata.create_all(engine)
 Users.metadata.create_all(engine)
 Privileges.metadata.create_all(engine)
 
-#seeder default data 
-
-privileges = insert(Privileges).values(name='users', created_at=ConfigDate.carbonDateTime())
-
-with engine.connect() as conn:
-    result = conn.execute(privileges)
-    conn.commit()
+    
 

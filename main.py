@@ -2,13 +2,14 @@ from typing import Union
 from datetime import datetime, timedelta
 import uvicorn
 from fastapi import FastAPI
+from backend.routes.route import auth
 
 from backend.app.helper.Utils import create_access_token,create_refresh_token,verify_password,get_hashed_password,ACCESS_TOKEN_EXPIRE_MINUTES
 # from routes.route import auth
 
 app = FastAPI()
 
-# app.mount('/api/v1',auth)
+app.mount('/api/v1',auth)
 
 if __name__ == '__main__':
     print(get_hashed_password('123'))
