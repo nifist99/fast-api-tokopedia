@@ -1,5 +1,4 @@
-from sqlalchemy.orm import Session
-
+from sqlalchemy.orm import Session, aliased
 from dbconfig.schemas import UsersSchema as schemas
 from dbconfig.migrations import UsersMigration as models
 

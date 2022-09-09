@@ -31,3 +31,5 @@ jwt token
 
 pip install "python-jose[cryptography]"
 pip install "passlib[bcrypt]"
+
+__init__.py menandakan bahwa di dalam folder tersebut adalah sebuah modul, bikin dan kosongkan aja
