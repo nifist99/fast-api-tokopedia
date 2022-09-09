@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from migrations.UsersMigration import Users
 from migrations.PrivilegesMigration import Privileges
 from migrations.OauthAccessTokenMigration import Oauth
-from migrations import engine
+from ConnectionDB import Base,engine
 
 # create table
 

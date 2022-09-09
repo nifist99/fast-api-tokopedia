@@ -1,7 +1,7 @@
 from sqlalchemy.schema import Column
 from sqlalchemy.types import String, Integer, Text,DateTime,Date
 from sqlalchemy import insert
-from . import Base,engine
+from ConnectionDB import Base
 
 class Users(Base):
     __tablename__       = "users"

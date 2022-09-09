@@ -1,6 +1,6 @@
 from sqlalchemy.schema import Column
 from sqlalchemy.types import String, Integer, Text,DateTime,Date
-from . import Base
+from ConnectionDB import Base
 
 class Oauth(Base):
     __tablename__       = "oauth_access_token"
