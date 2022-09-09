@@ -7,6 +7,7 @@ from pydantic import BaseModel
 class UsersBase(BaseModel):
     name: str
     email : str
+    password : str
     status: str
     privileges_id: int
 

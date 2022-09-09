@@ -58,12 +58,12 @@ async def forget(request : Request,respone : Response):
 # fixs respon api
 
 @restAuth.post("/logout")
-async def logout(request : Request,respone : Response):
+async def logout(request : Request,respone : Response , register = body_auth_register):
     req = await request.json()
+
     print(req)
-    # validasi
-    validate = UsersValidate.forgotPassword(req)
-    print(validate)
+
+    exit()
     if(validate['status']):
         respone.status_code = status.HTTP_200_OK
         return {
