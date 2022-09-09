@@ -42,8 +42,7 @@ async def register(email: str = Form(),name : str = Form(), password: str = Form
             }
 
 @restAuth.post("/forget")
-async def forget(register : body_auth_login, respone : Response):
-
+async def forget(request : Request,respone : Response):
         respone.status_code = status.HTTP_200_OK
         return {
                     "status": True, 
