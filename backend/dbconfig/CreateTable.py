@@ -3,10 +3,10 @@ from typing import List
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
-from migration.UsersMigration import Users
-from migration.PrivilegesMigration import Privileges
-from migration.OauthAccessTokenMigration import Oauth
-from migration import engine
+from migrations.UsersMigration import Users
+from migrations.PrivilegesMigration import Privileges
+from migrations.OauthAccessTokenMigration import Oauth
+from migrations import engine
 
 # create table
 

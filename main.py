@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import uvicorn
 from fastapi import FastAPI
 
-from app.helper.Utils import create_access_token,create_refresh_token,verify_password,get_hashed_password,ACCESS_TOKEN_EXPIRE_MINUTES
+from backend.app.helper.Utils import create_access_token,create_refresh_token,verify_password,get_hashed_password,ACCESS_TOKEN_EXPIRE_MINUTES
 # from routes.route import auth
 
 app = FastAPI()

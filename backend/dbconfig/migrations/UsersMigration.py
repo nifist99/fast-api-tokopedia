@@ -1,6 +1,7 @@
 from sqlalchemy.schema import Column
 from sqlalchemy.types import String, Integer, Text,DateTime,Date
-from . import Base
+from sqlalchemy import insert
+from . import Base,engine
 
 class Users(Base):
     __tablename__       = "users"
@@ -13,3 +14,5 @@ class Users(Base):
     remember_token      = Column(String(250),nullable=True)
     created_at          = Column(DateTime)
     updated_at          = Column(DateTime)
+
+
