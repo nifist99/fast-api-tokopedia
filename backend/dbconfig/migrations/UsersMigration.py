@@ -1,7 +1,7 @@
 from sqlalchemy.schema import Column
 from sqlalchemy.types import String, Integer, Text,DateTime,Date
 from sqlalchemy import insert
-from ConnectionDB import Base
+from backend.dbconfig.ConnectionDB import Base
 
 class Users(Base):
     __tablename__       = "users"
@@ -16,19 +16,19 @@ class Users(Base):
     created_at          = Column(DateTime)
     updated_at          = Column(DateTime,nullable=True)
 
-    def __repr__(self):
-        return self.name
+    # def __repr__(self):
+    #     return self.name
     
-    def __init__(self,id,privileges_id,name,password,email,email_verified_at,status,remember_token,created_at,updated_at):
-        self.id                 = id
-        self.name               = name
-        self.privileges_id      = privileges_id
-        self.email              = email
-        self.email_verified_at  = email_verified_at
-        self.status             = status
-        self.remember_token     = remember_token
-        self.created_at         = created_at
-        self.updated_at         = updated_at
-        self.password           = password
+    # def __init__(self,id,privileges_id,name,password,email,email_verified_at,status,remember_token,created_at,updated_at):
+    #     self.id                 = id
+    #     self.name               = name
+    #     self.privileges_id      = privileges_id
+    #     self.email              = email
+    #     self.email_verified_at  = email_verified_at
+    #     self.status             = status
+    #     self.remember_token     = remember_token
+    #     self.created_at         = created_at
+    #     self.updated_at         = updated_at
+    #     self.password           = password
 
 

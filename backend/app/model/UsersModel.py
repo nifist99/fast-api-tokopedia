@@ -3,33 +3,67 @@
 from sqlalchemy.orm import Session, aliased
 from fastapi import APIRouter, Depends, status
 from backend.app.helper.Utils import create_access_token,create_refresh_token,verify_password,get_hashed_password,ACCESS_TOKEN_EXPIRE_MINUTES
-
+from fastapi.responses import JSONResponse
 # import from file python
 
-from dbconfig.schemas import UsersSchema as schemas
-from dbconfig.migrations import UsersMigration as models
-from dbconfig.ConnectionDB import Connection
-from pydantic import BaseModel
+from backend.dbconfig.schemas import UsersSchema as schemas
+from backend.dbconfig.migrations import UsersMigration as models
+from backend.dbconfig.ConnectionDB import Connection,engine
+from pydantic import BaseModel, EmailStr,ValidationError, validator
+from sqlalchemy.exc import SQLAlchemyError
 
-get_db = Connection.get_db()
-
-
-def get_user(user_id: int,db: Session = Depends(get_db)):
-    return db.query(models.Users).filter(models.Users.id == user_id).first()
+#helper
+from backend.app.helper.date import ConfigDate
 
 
-def get_user_by_email(email: str,db: Session = Depends(get_db)):
-    return db.query(models.Users).filter(models.Users.email == email).first()
+class body_auth_login(BaseModel):       
+    email: EmailStr
+    password : str
+
+class body_auth_register(BaseModel):
+    name : str       
+    email: EmailStr
+    password : str
+
+class UsersModel:
+
+    def getUsers(user_id: int,db: Session = Depends(Connection.get_db)):
+        return db.query(models.Users).filter(models.Users.id == user_id).first()
 
 
-def get_users(skip: int = 0, limit: int = 100,db: Session = Depends(get_db)):
-    return db.query(models.Users).offset(skip).limit(limit).all()
+    def getUsersByEmail(email: str,db: Session = Depends(Connection.get_db)):
+        return db.query(models.Users).filter(models.Users.email == email).first()
 
 
-def create_user(user: schemas.UsersCreate,db: Session = Depends(get_db)):
-    password_encryption = get_hashed_password(user.password)
-    db_user = models.Users(email=user.email, hashed_password=password_encryption, status="active")
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+    def getAllUsers(skip: int = 0, limit: int = 100,db: Session = Depends(Connection.get_db)):
+        return db.query(models.Users).offset(skip).limit(limit).all()
+
+
+    def createUsers(body):
+        try:
+            db = Session(bind=engine,expire_on_commit=False)
+
+            password_encryption = get_hashed_password(body.password)
+            data = models.Users(
+                                name=body.name,
+                                email=body.email, 
+                                password=password_encryption, 
+                                status="active",
+                                privileges_id=1,
+                                created_at= ConfigDate.carbonDateTime()
+                                )
+            db.add(data)
+            db.commit()
+            db.close()
+            return {
+                "status":True,
+                "message":"success register users : "+data.email,
+            }
+        except SQLAlchemyError as e:
+            errMsg = str(e.__dict__['orig'])
+            db.rollback()
+            db.close()
+            return {
+                "status":False,
+                "message":errMsg,
+            }

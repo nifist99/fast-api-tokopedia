@@ -19,6 +19,8 @@ class UsersCreate(UsersBase):
 class Users(UsersBase):
     id: int
     status: str
+    name: str
+    email: str
 
     class Config:
         orm_mode = True

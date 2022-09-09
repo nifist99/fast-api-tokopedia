@@ -1,6 +1,6 @@
 from sqlalchemy.schema import Column
 from sqlalchemy.types import String, Integer, Text,DateTime,Date
-from ConnectionDB import Base
+from backend.dbconfig.ConnectionDB import Base
 
 class Privileges(Base):
     __tablename__       = "privileges"
