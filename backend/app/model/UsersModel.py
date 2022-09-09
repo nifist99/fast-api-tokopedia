@@ -13,14 +13,6 @@ from pydantic import BaseModel
 
 get_db = Connection.get_db()
 
-class body_users(BaseModel):       
-    name: str
-    is_active: bool
-    first_name: str
-    middle_name: str
-    last_name: str
-    initial: str
-    email: str
 
 def get_user(user_id: int,db: Session = Depends(get_db)):
     return db.query(models.User).filter(models.User.id == user_id).first()
