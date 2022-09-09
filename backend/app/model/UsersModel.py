@@ -27,17 +27,93 @@ class body_auth_register(BaseModel):
 
 class UsersModel:
 
-    def getUsers(user_id: int,db: Session = Depends(Connection.get_db)):
-        return db.query(models.Users).filter(models.Users.id == user_id).first()
+    def getUsers(user_id: int):
+        try:
+            db = Session(bind=engine,expire_on_commit=False)
+            return {
+                    "status":True,
+                    "data":db.query(models.Users).filter(models.Users.id == user_id).first(),
+            }
+        except SQLAlchemyError as e:
+            errMsg = str(e.__dict__['orig'])
+            db.rollback()
+            db.close()
+            return {
+                "status":False,
+                "message":errMsg,
+            }
+
+    def getUsersByEmail(email: str):
+        try:
+            db = Session(bind=engine,expire_on_commit=False)
+            data = db.query(models.Users).filter(models.Users.email == email).first()
+            if data is not None:
+                return {
+                        "status":True,
+                        "message":"success get data",
+                        "data":{
+                            "email":data.email,
+                            "password":data.password,
+                            "id":data.id,
+                            "status":data.status
+                        },
+                }
+            else:
+                return {
+                        "status":False,
+                        "message":"email not found"
+                }
+        except SQLAlchemyError as e:
+            errMsg = str(e.__dict__['orig'])
+            db.rollback()
+            db.close()
+            return {
+                "status":False,
+                "message":errMsg,
+            }
 
 
-    def getUsersByEmail(email: str,db: Session = Depends(Connection.get_db)):
-        return db.query(models.Users).filter(models.Users.email == email).first()
+    def getAllUsers(skip: int = 0, limit: int = 100):
+        try:
+            db = Session(bind=engine,expire_on_commit=False)
+            return {
+                "status":True,
+                "data":db.query(models.Users).offset(skip).limit(limit).all(),
+            }
+        except SQLAlchemyError as e:
+            errMsg = str(e.__dict__['orig'])
+            db.rollback()
+            db.close()
+            return {
+                "status":False,
+                "message":errMsg,
+            }
 
-
-    def getAllUsers(skip: int = 0, limit: int = 100,db: Session = Depends(Connection.get_db)):
-        return db.query(models.Users).offset(skip).limit(limit).all()
-
+    def deleteUsers(user_id: int):
+        try:
+            db = Session(bind=engine,expire_on_commit=False)
+            check = db.query(models.Users).filter(models.Users.id == user_id).first()
+            if check:
+                db.delete(check)
+                db.commit()
+                db.close()
+                return {
+                    "status":True,
+                    "message":"success delete data",
+                }
+            else:
+                return {
+                    "status":False,
+                    "message":"failed delete, data not found",
+                }
+        except SQLAlchemyError as e:
+            errMsg = str(e.__dict__['orig'])
+            db.rollback()
+            db.close()
+            return {
+                "status":False,
+                "message":errMsg,
+            }
 
     def createUsers(body):
         try:
@@ -67,3 +143,4 @@ class UsersModel:
                 "status":False,
                 "message":errMsg,
             }
+

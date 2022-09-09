@@ -10,7 +10,7 @@ from uuid import uuid4
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-from backend.app.helper.Utils import get_hashed_password,create_access_token,ACCESS_TOKEN_EXPIRE_MINUTES
+from backend.app.helper.Utils import get_hashed_password,create_access_token,ACCESS_TOKEN_EXPIRE_MINUTES,verify_password
 from backend.app.validation.UsersValidate import UsersValidate
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session, aliased
@@ -23,13 +23,35 @@ restAuth = APIRouter(prefix="/auth")
 
 
 @restAuth.post("/login")
-async def login(email: str = Form(), password: str = Form()):
+async def login(body: body_auth_login):
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    return {
-                "email":email,
-                "password":get_hashed_password(password),
-                "token" : create_access_token(email,expires_delta=access_token_expires)
+    email = UsersModel.getUsersByEmail(body.email)
+    if email['status']==True:
+        check = verify_password(body.password,email['data']['password'])
+        if check == True:
+            token = create_access_token(body.email,expires_delta=access_token_expires)
+            respon={
+                "status":True,
+                "message":"Success Login",
+                "code":200,
+                "token":token,
+                "data":email['data']
             }
+            return JSONResponse(content=respon,status_code=status.HTTP_200_OK)
+        else:
+            respon={
+                "status":False,
+                "message":"Password Wrong",
+                "code":400
+            }
+            return JSONResponse(content=respon,status_code=status.HTTP_400_BAD_REQUEST)
+    else:
+        respon={
+                "status":False,
+                "message":email['message'],
+                "code":400
+            }
+        return JSONResponse(content=respon,status_code=status.HTTP_400_BAD_REQUEST)
 
 @restAuth.post("/register")
 async def register(body: body_auth_register):
