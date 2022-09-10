@@ -22,6 +22,8 @@ from backend.app.model.AccessToken import TokenModel
 
 restAuth = APIRouter(prefix="/auth")
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 @restAuth.post("/login")
 async def login(body: body_auth_login):
@@ -93,11 +95,6 @@ async def forget(request : Request,respone : Response):
                     "message":"success send password to email",
                     "data"  : register
                 }
-
-@restAuth.get("/")
-async def index():
-    return "message"
-# fixs respon api
 
 @restAuth.post("/logout")
 async def logout(request : Request,respone : Response , register = body_auth_register):

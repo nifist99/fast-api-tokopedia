@@ -109,6 +109,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
+        status=False,
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
@@ -122,7 +123,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     user = get_user(email=token_data.email)
     if user['status'] != True:
         raise credentials_exception
-    return user
+    return {
+        "status":True,
+        "code":200,
+        "message":"success autentication",
+        "data":user
+    }
 
 async def get_current_active_user(current_user: User = Depends(get_current_user)):
     if current_user.status:

@@ -60,6 +60,7 @@ class UsersModel:
                         "data":{
                             "email":data.email,
                             "name":data.name,
+                            "password":data.password,
                             "id":data.id,
                             "status":data.status
                         },
