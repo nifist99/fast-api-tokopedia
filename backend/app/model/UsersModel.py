@@ -53,7 +53,7 @@ class UsersModel:
                         "message":"success get data",
                         "data":{
                             "email":data.email,
-                            "password":data.password,
+                            "name":data.name,
                             "id":data.id,
                             "status":data.status
                         },

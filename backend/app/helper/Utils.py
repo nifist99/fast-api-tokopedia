@@ -7,6 +7,10 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from dotenv import dotenv_values,load_dotenv
 from fastapi import HTTPException,Depends,status
 from pydantic import BaseModel
+from backend.dbconfig.migrations import UsersMigration as models
+from backend.dbconfig.ConnectionDB import Connection,engine
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session, aliased
 
 config = dotenv_values(".env")
 
@@ -23,14 +27,12 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: Union[str, None] = None
+    email: Union[str, None] = None
 
 
 class User(BaseModel):
-    username: str
     email: Union[str, None] = None
-    full_name: Union[str, None] = None
-    disabled: Union[bool, None] = None
+    status: Union[bool, None] = None
 
 
 class UserInDB(User):
@@ -47,6 +49,35 @@ def get_hashed_password(password: str) -> str:
 def verify_password(password: str, hashed_pass: str) -> bool:
     return password_context.verify(password, hashed_pass)
 
+def get_user(email: str):
+    try:
+            db = Session(bind=engine,expire_on_commit=False)
+            data = db.query(models.Users).filter(models.Users.email == email).first()
+            if data is not None:
+                return {
+                        "status":True,
+                        "message":"success get data",
+                        "data":{
+                            "email":data.email,
+                            "password":data.password,
+                            "id":data.id,
+                            "status":data.status
+                        },
+                }
+            else:
+                return {
+                        "status":False,
+                        "message":"email not found"
+                }
+    except SQLAlchemyError as e:
+            errMsg = str(e.__dict__['orig'])
+            db.rollback()
+            db.close()
+            return {
+                "status":False,
+                "message":errMsg,
+            }
+
 
 def create_access_token(subject: Union[str, Any], expires_delta: int = None) -> str:
     if expires_delta is not None:
@@ -56,7 +87,10 @@ def create_access_token(subject: Union[str, Any], expires_delta: int = None) -> 
     
     to_encode = {"exp": expires_delta, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, ALGORITHM)
-    return encoded_jwt
+    return {
+                "token":encoded_jwt,
+                "expired_at":expires_delta
+            }
 
 def create_refresh_token(subject: Union[str, Any], expires_delta: int = None) -> str:
     if expires_delta is not None:
@@ -66,7 +100,10 @@ def create_refresh_token(subject: Union[str, Any], expires_delta: int = None) ->
     
     to_encode = {"exp": expires_delta, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, JWT_REFRESH_SECRET_KEY, ALGORITHM)
-    return encoded_jwt
+    return {
+                "token":encoded_jwt,
+                "expired_at":expires_delta
+            }
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
@@ -76,13 +113,18 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = 'niko'
-        if username is None:
+        email: str = payload.get("sub")
+        if email is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = TokenData(email=email)
     except JWTError:
         raise credentials_exception
-    user = get_user(fake_users_db, username=token_data.username)
-    if user is None:
+    user = get_user(email=token_data.email)
+    if user['status'] != True:
         raise credentials_exception
     return user
+
+async def get_current_active_user(current_user: User = Depends(get_current_user)):
+    if current_user.status:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user

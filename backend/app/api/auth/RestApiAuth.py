@@ -18,6 +18,7 @@ from backend.dbconfig.ConnectionDB import Connection
 
 
 from backend.app.model.UsersModel import body_auth_login,body_auth_register,UsersModel
+from backend.app.model.AccessToken import TokenModel
 
 restAuth = APIRouter(prefix="/auth")
 
@@ -30,11 +31,13 @@ async def login(body: body_auth_login):
         check = verify_password(body.password,email['data']['password'])
         if check == True:
             token = create_access_token(body.email,expires_delta=access_token_expires)
+            # save token to database
+            TokenModel.createToken(email['data']['id'],token['token'],token['expired_at'])
             respon={
                 "status":True,
                 "message":"Success Login",
                 "code":200,
-                "token":token,
+                "token":token['token'],
                 "data":email['data']
             }
             return JSONResponse(content=respon,status_code=status.HTTP_200_OK)

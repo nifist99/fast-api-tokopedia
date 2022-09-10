@@ -14,16 +14,16 @@ class Oauth(Base):
     created_at          = Column(DateTime)
     updated_at          = Column(DateTime,nullable=True)
 
-    def __repr__(self):
-        return self.token
+    # def __repr__(self):
+    #     return self.token
     
-    def __init__(self,id,users_id,name,token,screet_key,expired_at,last_used_at,created_at,updated_at):
-        self.id                 = id
-        self.users_id           = users_id
-        self.name               = name
-        self.token              = token
-        self.screet_key         = screet_key
-        self.expired_at         = expired_at
-        self.last_used_at       = last_used_at
-        self.created_at         = created_at
-        self.updated_at         = updated_at
+    # def __init__(self,id,users_id,name,token,screet_key,expired_at,last_used_at,created_at,updated_at):
+    #     self.id                 = id
+    #     self.users_id           = users_id
+    #     self.name               = name
+    #     self.token              = token
+    #     self.screet_key         = screet_key
+    #     self.expired_at         = expired_at
+    #     self.last_used_at       = last_used_at
+    #     self.created_at         = created_at
+    #     self.updated_at         = updated_at
