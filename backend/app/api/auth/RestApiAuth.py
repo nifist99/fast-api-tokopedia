@@ -94,6 +94,9 @@ async def forget(request : Request,respone : Response):
                     "data"  : register
                 }
 
+@restAuth.get("/")
+async def index():
+    return "message"
 # fixs respon api
 
 @restAuth.post("/logout")

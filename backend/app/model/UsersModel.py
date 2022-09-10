@@ -30,9 +30,15 @@ class UsersModel:
     def getUsers(user_id: int):
         try:
             db = Session(bind=engine,expire_on_commit=False)
+            data = db.query(models.Users).filter(models.Users.id == user_id).first()
             return {
                     "status":True,
-                    "data":db.query(models.Users).filter(models.Users.id == user_id).first(),
+                    "data":{
+                            "email":data.email,
+                            "name":data.name,
+                            "id":data.id,
+                            "status":data.status
+                        },
             }
         except SQLAlchemyError as e:
             errMsg = str(e.__dict__['orig'])
@@ -76,9 +82,10 @@ class UsersModel:
     def getAllUsers(skip: int = 0, limit: int = 100):
         try:
             db = Session(bind=engine,expire_on_commit=False)
+            data = db.query(models.Users).offset(skip).limit(limit).all()
             return {
                 "status":True,
-                "data":db.query(models.Users).offset(skip).limit(limit).all(),
+                "data"  :data,
             }
         except SQLAlchemyError as e:
             errMsg = str(e.__dict__['orig'])

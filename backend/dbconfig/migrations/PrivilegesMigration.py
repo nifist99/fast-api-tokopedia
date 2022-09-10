@@ -9,11 +9,11 @@ class Privileges(Base):
     created_at          = Column(DateTime)
     updated_at          = Column(DateTime,nullable=True)
 
-    def __repr__(self):
-        return self.name
+    # def __repr__(self):
+    #     return self.name
     
-    def __init__(self,id,name,created_at,updated_at):
-        self.id                 = id
-        self.name               = name
-        self.created_at         = created_at
-        self.updated_at         = updated_at
+    # def __init__(self,id,name,created_at,updated_at):
+    #     self.id                 = id
+    #     self.name               = name
+    #     self.created_at         = created_at
+    #     self.updated_at         = updated_at
