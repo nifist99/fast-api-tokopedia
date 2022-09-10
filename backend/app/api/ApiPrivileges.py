@@ -9,7 +9,6 @@ from uuid import uuid4
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-from backend.app.helper.Utils import get_hashed_password,create_access_token,ACCESS_TOKEN_EXPIRE_MINUTES,verify_password
 from backend.app.validation.UsersValidate import UsersValidate
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session, aliased

@@ -10,11 +10,12 @@ from uuid import uuid4
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-from backend.app.helper.Utils import get_hashed_password,create_access_token,ACCESS_TOKEN_EXPIRE_MINUTES,verify_password
+from backend.app.helper.Utils import get_hashed_password,verify_password
 from backend.app.validation.UsersValidate import UsersValidate
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session, aliased
 from backend.dbconfig.ConnectionDB import Connection
+from backend.app.helper.JwtToken import AuthHandler
 
 
 from backend.app.model.UsersModel import body_auth_login,body_auth_register,UsersModel
@@ -24,15 +25,16 @@ restAuth = APIRouter(prefix="/auth")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-
+auth_handler = AuthHandler()
 @restAuth.post("/login")
 async def login(body: body_auth_login):
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    # access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     email = UsersModel.getUsersByEmail(body.email)
     if email['status']==True:
         check = verify_password(body.password,email['data']['password'])
         if check == True:
-            token = create_access_token(body.email,expires_delta=access_token_expires)
+            # token = create_access_token(body.email,expires_delta=access_token_expires)
+            token = auth_handler.encode_token(body.email)
             # save token to database
             TokenModel.createToken(email['data']['id'],token['token'],token['expired_at'])
             respon={
