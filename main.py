@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 import uvicorn
 from fastapi import FastAPI, Request
 from xavier.routes.route import app
-# from routes.route import auth
 
 
 if __name__ == '__main__':
