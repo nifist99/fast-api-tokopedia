@@ -9,7 +9,6 @@ from uuid import uuid4
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-from xavier.app.validation.UsersValidate import UsersValidate
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session, aliased
 from xavier.dbconfig.ConnectionDB import Connection

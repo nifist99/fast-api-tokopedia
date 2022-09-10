@@ -11,7 +11,6 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from xavier.app.helper.Utils import get_hashed_password,verify_password
-from xavier.app.validation.UsersValidate import UsersValidate
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session, aliased
 from xavier.dbconfig.ConnectionDB import Connection
@@ -99,26 +98,9 @@ async def forget(request : Request,respone : Response):
                 }
 
 @restAuth.post("/logout")
-async def logout(request : Request,respone : Response , register = body_auth_register):
+async def logout(request : Request):
     req = await request.json()
-
     print(req)
 
-    exit()
-    if(validate['status']):
-        respone.status_code = status.HTTP_200_OK
-        return {
-            "status":True,
-            "code":respone.status_code,
-            "message":validate['message'],
-            "data":req
-        }
-    else:
-        respone.status_code = status.HTTP_400_BAD_REQUEST
-        return {
-            "status":False,
-            "code":respone.status_code,
-            "message":validate['message'],
-        }
          
             
